@@ -1,0 +1,22 @@
+{
+  "name": "express-server",
+  "version": "1.0.0",
+  "description": "basic CRUD requests",
+  "main": "crud-request.js",
+  "scripts": {
+    "server": "node ./crud-request-server.js",
+	"client": "node ./client-cli.js",
+    "test": "jest --forceExit",
+    "test-verbose": "jest --verbose --forceExit"
+  },
+  "author": "Krisztián",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.1"
+  }
+}
