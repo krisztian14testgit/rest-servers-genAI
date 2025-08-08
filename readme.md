@@ -1,20 +1,25 @@
-# Creating CRUD-request with client CLI
+# Creating REST full apis by genAI
 
-Generating the CRUD api request by genAI (leo-Llama3.2) and covering them by unit tests.
-Searching and fixing issues by Microsoft Copilot
+Generating the rest api by genAI (leo-Llama3.1) and covering them by unit test cases.
+Fixing issues, bugs which can come during development. They will be sent to Microsoft Copilot to get hints.
 
 
 ## Goal
 
-Working with  genAI how it can help for the developer to generate basic CRUD methods with test cases.
-Furthermore: Generating CLI app that will communcite to the server by sending ( GET, POST, PUT, DELETE) requests.
+Working with  genAI how it can assist for the developer to generate basic methods and code snippet with test cases. Therefore the developers can only focuos on the special evetns or the business features.
+
+## CLI apps
+Generating CLI app that will communcite to the server by sending rest (GET, POST, PUT, DELETE) requests.
+Two sort of CLI apps which are written:
+	1. by nodejs
+	2. by python
 
 ## Performance calculation tasks
 	- nodeJS: heavy calculation jobs by web-worker, clusters
 	- python: 
 		- multi threading, processing (CPU-bound taks)
 		- speed with numberical task e.g.: numPy
-	- webassembly??
+	- webassembly, perhap it will be tested
 
 # Run servers
 	- In nodejs: 
