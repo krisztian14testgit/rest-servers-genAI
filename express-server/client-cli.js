@@ -164,7 +164,7 @@ _showHelp = () => {
   console.log("  (1) get all elements  - Fetch all elements from the server");
   console.log("  (2) insert new element  - Insert a randomly generated new element");
   console.log("  (3) update element by PUT  - give the element ID");
-  console.log("  (4) update element by PATCH  - give the element ID");
+  console.log("  (4) update element by PATCH  - give the element ID, update 'description' field only");
   console.log("  (5) delete element  - Delete an element by ID");
   console.log("  (10) help  - Show this command list");
   console.log("  (0) exit  - Quit the application\n");
