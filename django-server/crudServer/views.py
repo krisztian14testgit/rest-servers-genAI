@@ -121,6 +121,17 @@ def patch_element(request: HttpRequest, id: int):
     except Exception as e:
         return JsonResponse({"error": "Failed to update element"}, status=500)
 
+def delete_element(request: HttpRequest, id: int):
+    try:
+        found_elements = [x for x in elements_array if x.id == id]
+        if found_elements:
+            element = found_elements [0]
+            elements_array.remove(element)
+            return JsonResponse({"message": "Element deleted successfully"})
+        else:
+            return JsonResponse({"error": "Element not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": "Failed to delete element"}, status=500)
   
 #endregion
 
@@ -130,6 +141,7 @@ REQUEST_METHODS_DICT: dict[str, CallbackType] = {
     "POST": create_element,
     "PUT": update_element,
     "PATCH": patch_element,
+    "DELETE": delete_element
 }
 
 @require_http_methods(["GET", "HEAD", "POST"])
