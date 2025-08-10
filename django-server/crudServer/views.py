@@ -41,7 +41,6 @@ def check_elements(request):
     return HttpResponse()
 
 # Create a view for getting all elements
-#@require_http_methods(["GET"])
 def get_elements(request):
     print('==>Request: get all elements')
     res_data = [{"id": element.id, "name": element.name, "description": element.description} for element in elements_array]
@@ -58,7 +57,7 @@ def get_element(request: HttpRequest, id: int):
         return JsonResponse({"error": "Element not found"}, status=404)
     
 
-# Create a view for creating a new element (in progress)
+# Create a view for creating a new element
 #@require_http_methods(["POST"])
 @csrf_exempt
 def create_element(request: HttpRequest):
@@ -84,17 +83,19 @@ def create_element(request: HttpRequest):
         print("err=>", err)
         return JsonResponse({"error": "Failed to create element"}, status=500)
 
-# Create a view for updating an entire element
-@require_http_methods(["PUT"])
-def update_element(request, id):
+# updating an target element
+def update_element(request: HttpRequest, id: int):
     try:
-        element = Element.objects.get(id=id)
-        element.name = request.POST["name"]
-        element.description = request.POST["description"]
-        element.save()
-        return JsonResponse({"id": element.id, "name": element.name, "description": element.description})
-    except ObjectDoesNotExist:
-        return JsonResponse({"error": "Element not found"}, status=404)
+        found_elements = [x for x in elements_array if x.id == id]
+        if len(found_elements) > 0:
+            element = found_elements[0]
+            decoded_data = request.body.decode('utf-8')
+            json_body = json.loads(decoded_data)
+            element.name = json_body["name"]
+            element.description = json_body["description"]
+            return JsonResponse({"id": element.id, "name": element.name, "description": element.description})
+        else:
+            return JsonResponse({"error": "Element not found"}, status=404)
     except KeyError:
         return JsonResponse({"error": "Name or description field is missing"}, status=400)
     except Exception as e:
@@ -102,19 +103,31 @@ def update_element(request, id):
     
 #endregion
 
-ELEMENTS_REQUEST_METHODS_DICT: dict[str, CallbackType] = {
+REQUEST_METHODS_DICT: dict[str, CallbackType] = {
     "GET": get_elements,
     "HEAD": check_elements,
-    "POST": create_element #in-progress
+    "POST": create_element,
+    "PUT": update_element
 }
 
 @require_http_methods(["GET", "HEAD", "POST"])
 def get_post_elements_handler(request: HttpRequest) -> HttpResponse:
     print('called request = ', request.method)
     try:
-        if request.method in ELEMENTS_REQUEST_METHODS_DICT:
-            return ELEMENTS_REQUEST_METHODS_DICT[request.method](request)
+        if request.method in REQUEST_METHODS_DICT:
+            return REQUEST_METHODS_DICT[request.method](request)
         else:
             return JsonResponse({"error": "Failed to execture method request:" + request.method + "That request is not implemented in backend side yet!"}, status=500)
     except Exception as e:
-        return JsonResponse({"error": "Internal server error"}, status=500) 
+        return JsonResponse({"error": "Internal server error"}, status=500)
+    
+@require_http_methods(["GET", "PUT", "DELETE"])
+def get_put_delete_element_handler(request: HttpRequest, id: int) -> HttpResponse:
+    print('called request = ', request.method)
+    try:
+        if request.method in REQUEST_METHODS_DICT:
+            return REQUEST_METHODS_DICT[request.method](request, id)
+        else:
+            return JsonResponse({"error": "Failed to execute method request:" + request.method + "That request is not implemented in backend side yet!"}, status=500)
+    except Exception as e:
+        return JsonResponse({"error": "Internal server error"}, status=500)

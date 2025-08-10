@@ -3,6 +3,13 @@
 Generating the rest api by genAI (leo-Llama3.1) and covering them by unit test cases.
 Fixing issues, bugs which can come during development. They will be sent to Microsoft Copilot to get hints.
 
+#tasks
+	1. add put, path delete request both sides
+	2. extend nodejs client with missing methods: put, patch, delete
+	3. add unit test cased for django based on prev generated in supertest(http test)
+	3. create python client based on nodejs
+	--- 
+	update http2 version
 
 ## Goal
 
