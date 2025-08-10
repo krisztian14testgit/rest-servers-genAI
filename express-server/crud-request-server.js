@@ -18,7 +18,7 @@ let elements = [
 
 app.head('/elements', (req, res) => {
   printRequestMethod(req.method);
-  res.send();
+  res.status(200).send();
 });
 
 // Get all elements
