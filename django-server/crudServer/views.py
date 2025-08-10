@@ -100,14 +100,36 @@ def update_element(request: HttpRequest, id: int):
         return JsonResponse({"error": "Name or description field is missing"}, status=400)
     except Exception as e:
         return JsonResponse({"error": "Failed to update element"}, status=500)
-    
+
+def patch_element(request: HttpRequest, id: int):
+    try:
+        found_elements = [x for x in elements_array if x.id == id]
+        if found_elements:
+            element = found_elements [0]
+            decoded_data = request.body.decode('utf-8')
+            json_body = json.loads(decoded_data)
+
+            # Update only the fields that are present in the request body
+            if "name" in json_body:
+                element.name = json_body["name"]
+            if "description" in json_body:
+                element.description = json_body["description"]
+
+            return JsonResponse({"id": element.id, "name": element.name, "description": element.description})
+        else:
+            return JsonResponse({"error": "Element not found"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": "Failed to update element"}, status=500)
+
+  
 #endregion
 
 REQUEST_METHODS_DICT: dict[str, CallbackType] = {
     "GET": get_elements,
     "HEAD": check_elements,
     "POST": create_element,
-    "PUT": update_element
+    "PUT": update_element,
+    "PATCH": patch_element,
 }
 
 @require_http_methods(["GET", "HEAD", "POST"])
@@ -121,7 +143,7 @@ def get_post_elements_handler(request: HttpRequest) -> HttpResponse:
     except Exception as e:
         return JsonResponse({"error": "Internal server error"}, status=500)
     
-@require_http_methods(["GET", "PUT", "DELETE"])
+@require_http_methods(["GET", "PUT", "PATCH", "DELETE"])
 def get_put_delete_element_handler(request: HttpRequest, id: int) -> HttpResponse:
     print('called request = ', request.method)
     try:
