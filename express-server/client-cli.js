@@ -9,10 +9,15 @@ const serverDomainDict = {
 };
 const BASE_URL = `${serverDomainDict["django"]}`;
 
+const ERROR_ID_NULL = 'Error: ID is null, it must be number! Write "- elementID" after command selection!';
+
 const COMMAND_DICT = {
 	1: "get all elements",
 	2: "insert new element",
-	3: "help",
+	3: "update element by PUT",
+	4: "update element by PATCH",
+	5: "delete element",
+	10:"help",
 	0: "exit"
 };
 
@@ -66,9 +71,25 @@ _http_post = (postData) => {
 	req.end();
 };
 
+_convertNumberToRunnableCommand = (commandString) => {
+	const commandNumber = parseInt(commandString);
+	
+	if (commandNumber >= 0) {
+		return COMMAND_DICT[commandNumber] ?? commandString;
+	}
+	
+	return commandString;
+};
+
+_receiveTargetIDfromCommand = (commandString) => {
+	const [commadn, elementId_str] = commandString.split('-');
+	const elementId = parseInt(elementId_str);
+	return !Number.isNaN(elementId) ? elementId : null;
+};
+
 _getAllElements = () => {
   axios.get(`${BASE_URL}/elements`)
-	.then(response => console.log("Elements:", response))
+	.then(response => console.log("Elements:", response.data))
 	.catch(error => console.error("Error fetching elements:", error.response?.data || error.message));
 };
 
@@ -80,37 +101,79 @@ _insertNewElement = () => {
 	description: randomDescription
   };
   
-  //this._http_post(body);
-  
   axios.post(`${BASE_URL}/elements`, body, {
 	  headers: this._setRequestHeaders(), 
 	  withCredentials: false //Include cookies in requests, when use authorization headers, or TLS client
 	})
     .then(response => console.log("New Element Created:", response.data))
-    .catch(error => console.error("Error inserting element:", error.response || error.message));
-	
+    .catch(error => console.error("Error inserting element:", error.response?.data || error.message));
+};
+
+_updateElementByPut = (id) => {
+  if (id === null) {
+	console.log(ERROR_ID_NULL);
+	return;
+  }
+  
+  const body = {
+    name: "updated-name",
+    description: "updated-description"
+  };
+
+  axios.put(`${BASE_URL}/element/${id}`, body, {
+    headers: this._setRequestHeaders(),
+    withCredentials: false
+  })
+  .then(response => console.log("Element updated:", response.data))
+  .catch(error => console.error("Error updating element:", error.response?.data || error.message));
+};
+
+_updateElementByPatch = (id) => {
+  if (id === null) {
+	console.log(ERROR_ID_NULL);
+	return;
+  }
+  
+  const updateData = {
+	description: "updated by PATCH"
+  };
+  axios.patch(`${BASE_URL}/element/${id}`, updateData, {
+    headers: this._setRequestHeaders(),
+    withCredentials: false
+  })
+  .then(response => console.log("Element updated:", response.data))
+  .catch(error => console.error("Error updating element:", error.response?.data || error.message));
+};
+
+_deleteElement = (id) => {
+  if (id === null) {
+	console.log(ERROR_ID_NULL);
+	return;
+  }
+  
+  axios.delete(`${BASE_URL}/element/${id}`, {
+    headers: this._setRequestHeaders(),
+    withCredentials: false
+  })
+  .then(() => console.log(`Element with ID ${id} deleted.`))
+  .catch(error => console.error(`Error deleting element with ID ${id}:`, error.response?.data || error.message));
 };
 
 _showHelp = () => {
   console.log("\nAvailable Commands:");
   console.log("  (1) get all elements  - Fetch all elements from the server");
   console.log("  (2) insert new element  - Insert a randomly generated new element");
-  console.log("  (3) help  - Show this command list");
+  console.log("  (3) update element by PUT  - give the element ID");
+  console.log("  (4) update element by PATCH  - give the element ID");
+  console.log("  (5) delete element  - Delete an element by ID");
+  console.log("  (10) help  - Show this command list");
   console.log("  (0) exit  - Quit the application\n");
 };
 
-_convertNumberToRunnableCommand = (commandString) => {
-	const commandNumber = parseInt(commandString);
-	
-	if (commandNumber >= 0) {
-		return COMMAND_DICT[commandNumber] ?? commandString;
-	}
-	
-	return commandString;
-};
-
 _processCommand = (command) => {
-  const commandCase = this._convertNumberToRunnableCommand(command.toLowerCase());
+  const trimmedCommand = command.toLowerCase();
+  const commandCase = this._convertNumberToRunnableCommand(trimmedCommand);
+  const targetId = this._receiveTargetIDfromCommand(trimmedCommand)
   console.log("comamndCase = ", commandCase);
   switch (commandCase) {
     case "get all elements":
@@ -118,6 +181,15 @@ _processCommand = (command) => {
       break;
     case "insert new element":
       this._insertNewElement();
+      break;
+	case "update element by PUT":
+      this._updateElementByPut(targetId);
+      break;
+    case "update element by PATCH":
+      this._updateElementByPatch(targetId);
+      break;
+    case "delete element":
+      this._deleteElement(targetId);
       break;
     case "help":
       this._showHelp();
