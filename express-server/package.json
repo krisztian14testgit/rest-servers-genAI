@@ -5,7 +5,7 @@
   "main": "crud-request.js",
   "scripts": {
     "server": "node ./crud-request-server.js",
-	"client": "node ./client-cli.js",
+	  "client": "node ./client-cli.js",
     "test": "jest --forceExit",
     "test-verbose": "jest --verbose --forceExit"
   },
