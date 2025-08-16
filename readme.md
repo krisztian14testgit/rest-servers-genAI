@@ -1,20 +1,29 @@
 # Creating REST full apis by genAI
 
-Generating the rest api by genAI (leo-Llama3.1) and covering them by unit test cases.
-Fixing issues, bugs which can come during development. They will be sent to Microsoft Copilot to get hints.
+Generating the rest api by the genAI (leo-Llama3.1) and covering them by unit test cases.
+Fixing issues, bugs which can come during development. They will be sent to Microsoft Copilot to get hints and solved issues.
 
-#tasks
+## Versions
+	- nodejs: 22.16.0
+	- ptyhon: 3.9.23
+	- django framework: 4.2.23 
+		-  step tutorial: https://docs.djangoproject.com/en/5.2/intro/tutorial01/
+	- django-cors-headers: 4.5.0
+	
+
+## Tasks
 	1. add put, path delete request both sides (done)
 	2. extend nodejs client with missing methods: put, patch, delete (done)
-	
-	3. add unit test cased for django based on prev generated in supertest(http test)
+	3. add unit test cased for django based on prev generated in supertest(done)
 	--- 
 	update http2 version
 	thread working
+	update to django and python to the latest version
+	create python server with fastapi
 
 ## Goal
 
-Working with  genAI how it can assist for the developer to generate basic methods and code snippet with test cases. Therefore the developers can only focuos on the special evetns or the business features.
+Working with the genAI how it can assist for the developer to generate basic methods and code snippet with test cases. Therefore the developers can only focuos on the special evetns or the business features.
 
 ## Experience using genAI for generating codes
 ### Disadvantaes, weak points
@@ -51,9 +60,6 @@ Two sort of CLI apps which are written:
 		3. npm command: `npm run server`
 	
 	- In python:
-		- django first step tutorial: https://docs.djangoproject.com/en/5.2/intro/tutorial01/
-		- python version: 3.9, because genAI generated basic structure of server code with python 3.9 version.
-		- django version: 4.2.23 
 		1. Look at your python env: `conda list env`
 		2. select "crud-py39" env: `conda activate crud-py39`, 
 			- if you don't have create new environment with python 3.9 version
@@ -71,5 +77,6 @@ Two sort of CLI apps which are written:
 		- run: `npm run test` or `npm run test-verbose`
 		
 	- In python-django
+		- optional: select current env by conda where django is.
 		- run: `ptyhon manage.py test`
 	
