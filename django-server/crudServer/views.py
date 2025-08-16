@@ -21,6 +21,9 @@ class Element:
         self.name = name
         self.description = description
 
+    def toDict(self):
+        return {"id": self.id, "name": self.name, "description": self.description}
+
 def index(request):
     print('==> CRUD-server is running, port:8000')
     return HttpResponse("Hello, crud server")
