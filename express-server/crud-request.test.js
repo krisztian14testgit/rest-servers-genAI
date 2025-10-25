@@ -1,3 +1,5 @@
+"use strict";
+
 const request = require("supertest");
 const express = require("express");
 const nodeServer = require("./crud-request-server.js");
@@ -26,14 +28,14 @@ describe("Elements API", () => {
 
   // ✅ Test: Get a specific element by ID (valid)
   it("should fetch an element by ID", async () => {
-    const res = await request(server).get(`/elements/${initialElement.id}`);
+    const res = await request(server).get(`/element/${initialElement.id}`);
     expect(res.status).toBe(200);
     expect(res.body.name).toBe("Element 1");
   });
 
   // ❌ Test: Get a non-existing element by ID
   it("should return 404 for non-existing element", async () => {
-    const res = await request(server).get("/elements/999");
+    const res = await request(server).get("/element/999");
     expect(res.status).toBe(404);
   });
 
@@ -53,40 +55,40 @@ describe("Elements API", () => {
 
   // ✅ Test: Fully update an element (PUT)
   it("should update an existing element", async () => {
-    const res = await request(server).put("/elements/1").send({ name: "Updated Name", description: "Updated description" });
+    const res = await request(server).put("/element/1").send({ name: "Updated Name", description: "Updated description" });
     expect(res.status).toBe(200);
     expect(res.body.name).toBe("Updated Name");
   });
 
   // ❌ Test: Update a non-existing element
   it("should return 404 for updating a non-existing element", async () => {
-    const res = await request(server).put("/elements/999").send({ name: "Won't Exist" });
+    const res = await request(server).put("/element/999").send({ name: "Won't Exist" });
     expect(res.status).toBe(404);
   });
 
   // ✅ Test: Partially update an element (PATCH)
   it("should partially update an element", async () => {
-    const res = await request(server).patch("/elements/1").send({ name: "Partially Updated" });
+    const res = await request(server).patch("/element/1").send({ name: "Partially Updated" });
     expect(res.status).toBe(200);
     expect(res.body.name).toBe("Partially Updated");
   });
 
   // ❌ Test: Partially update a non-existing element
   it("should return 404 for partially updating a non-existing element", async () => {
-    const res = await request(server).patch("/elements/999").send({ name: "Ghost Element" });
+    const res = await request(server).patch("/element/999").send({ name: "Ghost Element" });
     expect(res.status).toBe(404);
   });
 
   // ✅ Test: Delete an element
   it("should delete an existing element", async () => {
-    const res = await request(server).delete("/elements/1");
+    const res = await request(server).delete("/element/1");
     expect(res.status).toBe(200);
     expect(res.text).toBe("Element deleted successfully");
   });
 
   // ❌ Test: Delete a non-existing element
   it("should return 404 for deleting a non-existing element", async () => {
-    const res = await request(server).delete("/elements/999");
+    const res = await request(server).delete("/element/999");
     expect(res.status).toBe(404);
   });
 });

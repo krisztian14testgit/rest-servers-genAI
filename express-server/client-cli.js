@@ -1,3 +1,5 @@
+"use strict";
+
 const axios = require("axios");
 const readline = require("readline");
 const http = require('http');
