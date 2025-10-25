@@ -162,12 +162,13 @@ _deleteElement = (id) => {
 };
 
 _showHelp = () => {
+  console.log("\nIntro: You can execute the commands by typing the number in the bracket like 1 or with name as 'get all elements'.");
   console.log("\nAvailable Commands:");
   console.log("  (1) get all elements  - Fetch all elements from the server");
   console.log("  (2) insert new element  - Insert a randomly generated new element");
-  console.log("  (3) update element by PUT  - give the element ID");
-  console.log("  (4) update element by PATCH  - give the element ID, update 'description' field only");
-  console.log("  (5) delete element  - Delete an element by ID");
+  console.log("  (3) update element by PUT  - give the element ID, example: 3 - [id]");
+  console.log("  (4) update element by PATCH  - give the element ID, update 'description' field only, example: 4 - [id]");
+  console.log("  (5) delete element  - Delete an element by ID, example: 5 - [id]");
   console.log("  (10) help  - Show this command list");
   console.log("  (0) exit  - Quit the application\n");
 };
@@ -213,9 +214,10 @@ _promptUser = () => {
 
 checkServerOnline = function() {
   console.log("Server: ", BASE_URL);
+  const serverType = BASE_URL === serverDomainDict["django"] ? 'django': "nodejs";
   axios.head(`${BASE_URL}/elements`)
-	.then(_ => console.log("Server is online! You will get data from server!"))
-	.catch(err => console.log('%c SERVER IS OFFLINE!, you have to run it at first!', 'color: red;'))
+	.then(_ => console.log("Server is online! You will get data from server! Write 'help' keyword to get available commands!"))
+	.catch(err => console.log(`%c ${serverType} SERVER IS OFFLINE!, you have to run it at first!`, 'color: red;'))
 };
 
 run = () => {

@@ -4,7 +4,7 @@ Generating the rest api by the genAI (leo-Llama3.1) and covering them by unit te
 Fixing issues, bugs which can come during development. They will be sent to Microsoft Copilot to get hints and solved issues.
 
 ## Versions
-	- nodejs: 22.16.0
+	- nodejs: 22.16.0, express 5.1.0
 	- ptyhon: 3.9.23
 	- django framework: 4.2.23 
 		-  step tutorial: https://docs.djangoproject.com/en/5.2/intro/tutorial01/
