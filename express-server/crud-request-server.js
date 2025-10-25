@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -5,18 +7,29 @@ let newElementCounter = 0;
 
 app.use(express.json());
 
+function printRequestMethod(method = '') {
+  console.log('==> Request: ' + method);
+}
+
 let elements = [
   { id: 1, name: "Element 1", description: "First element" },
   { id: 2, name: "Element 2", description: "Second element" }
 ];
 
+app.head('/elements', (req, res) => {
+  printRequestMethod(req.method);
+  res.status(200).send();
+});
+
 // Get all elements
 app.get('/elements', (req, res) => {
+  printRequestMethod(req.method);
   res.json(elements);
 });
 
 // Get a unique element by ID
-app.get('/elements/:id', (req, res) => {
+app.get('/element/:id', (req, res) => {
+  printRequestMethod(req.method);
   const element = elements.find(el => el.id === parseInt(req.params.id));
   if (!element) return res.status(404).send('Element not found');
   res.json(element);
@@ -24,34 +37,37 @@ app.get('/elements/:id', (req, res) => {
 
 // Create a new element
 app.post('/elements', (req, res) => {
+  printRequestMethod(req.method);
   const newElement = {
     id: elements.length + 1,
     name: req.body.name || null,
     description: req.body.description || ""
   };
-  
+
   if (!newElement.name) {
-	res.status(400).send('Creating request: name prop is missing!');
-	return;
+    res.status(400).send('Creating request: name prop is missing!');
+    return;
   }
-  
+
   try {
-	elements.push(newElement);
-	newElementCounter++
-	console.log(`post request were called at ${newElementCounter} times`);
-	res.status(201).json(newElement);
-  } catch(err) {
-	console.error(err);
-	res.status(500).send('Insert new element is falied!');
+    elements.push(newElement);
+    newElementCounter++
+    console.log(`post request were called at ${newElementCounter} times`);
+    res.status(201).json(newElement);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Insert new element is falied!');
   }
- 
+
 });
 
 // Update an entire element
-app.put('/elements/:id', (req, res) => {
+app.put('/element/:id', (req, res) => {
+  printRequestMethod(req.method);
   const element = elements.find(el => el.id === parseInt(req.params.id));
   if (!element) return res.status(404).send('Element not found');
 
+  // update elements by reference (peek) in the array.
   element.name = req.body.name;
   element.description = req.body.description;
   res.json(element);
@@ -59,7 +75,8 @@ app.put('/elements/:id', (req, res) => {
 
 // Partially update an element
 // Allows partial updates, so you can update only specific fields instead of replacing the whole object.
-app.patch('/elements/:id', (req, res) => {
+app.patch('/element/:id', (req, res) => {
+  printRequestMethod(req.method);
   const element = elements.find(el => el.id === parseInt(req.params.id));
   if (!element) return res.status(404).send('Element not found');
 
@@ -70,7 +87,8 @@ app.patch('/elements/:id', (req, res) => {
 });
 
 // Delete an element
-app.delete('/elements/:id', (req, res) => {
+app.delete('/element/:id', (req, res) => {
+  printRequestMethod(req.method);
   const elementIndex = elements.findIndex(el => el.id === parseInt(req.params.id));
 
   if (elementIndex === -1) {
