@@ -1,10 +1,12 @@
 "use strict";
 
+/** Jest library for unit-testing
+ * npm install --save-dev jest supertest
+ */
+
 const request = require("supertest");
 const express = require("express");
 const nodeServer = require("./crud-request-server.js");
-
-//npm install --save-dev jest supertest
 
 describe("Elements API", () => {
   let server;
