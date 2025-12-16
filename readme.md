@@ -17,9 +17,9 @@ Fixing issues, bugs which can come during development. They will be sent to Micr
 	3. add unit test cased for django based on prev generated in supertest(done)
 	--- 
 	update http2 version
-	thread working
+	thread working (collatz and prime sequences with cache)
 	update to django and python to the latest version
-	create python server with fastapi
+	create python server with fastapi (optional)
 
 ## Goal
 
@@ -60,6 +60,7 @@ Two sort of CLI apps which are written:
 		3. npm command: `npm run server`
 	
 	- In python:
+		1. Go to ./django-server
 		1. Look at your python env: `conda list env`
 		2. select "crud-py39" env: `conda activate crud-py39`, 
 			- if you don't have create new environment with python 3.9 version
